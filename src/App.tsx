@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { OrdersTable, OrdersFilters } from "@/components";
+import { OrdersTable, OrdersFilters, OrdersPagination } from "@/components";
 import { ordersMock } from "@/data/orders";
 import type { OrderSideFilter, OrderStatusFilter } from "./types/order";
 
@@ -7,6 +7,24 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [sideFilter, setSideFilter] = useState<OrderSideFilter>('TODOS');
   const [statusFilter, setStatusFilter] = useState<OrderStatusFilter>('TODOS');
+	const [currentPage, setCurrentPage] = useState(1);
+
+	const itemsPerPage = 5;
+
+	const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setCurrentPage(1);
+  };
+
+  const handleSideFilterChange = (value: OrderSideFilter) => {
+    setSideFilter(value);
+    setCurrentPage(1);
+  };
+
+  const handleStatusFilterChange = (value: OrderStatusFilter) => {
+    setStatusFilter(value);
+    setCurrentPage(1);
+  };
 
   const filteredOrders = useMemo(() => {
 		let result = [...ordersMock];
@@ -32,6 +50,15 @@ export default function App() {
     return result;
 	}, [search, sideFilter, statusFilter]);
 
+	const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+
+  const paginatedOrders = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    return filteredOrders.slice(startIndex, endIndex);
+  }, [filteredOrders, currentPage]);
+
   return (
     <div style={{ padding: 20}}>
       <h1>Gerenciamento de Ordens</h1>
@@ -40,11 +67,18 @@ export default function App() {
         search={search}
         sideFilter={sideFilter}
         statusFilter={statusFilter}
-        onSearchChange={setSearch}
-        onSideFilterChange={setSideFilter}
-        onStatusFilterChange={setStatusFilter}
+        onSearchChange={handleSearchChange}
+        onSideFilterChange={handleSideFilterChange}
+        onStatusFilterChange={handleStatusFilterChange}
       />
-      <OrdersTable orders={filteredOrders} />
+
+      <OrdersTable orders={paginatedOrders} />
+
+			<OrdersPagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
     </div>
   )
 }
