@@ -1,6 +1,9 @@
 export type OrderSide = "COMPRA" | "VENDA";
 export type OrderStatus = "ABERTA" | "PARCIAL" | "EXECUTADA" | "CANCELADA";
 
+export type OrderStatusFilter = "TODOS" | OrderStatus;
+export type OrderSideFilter = "TODOS" | OrderSide;
+
 export type Order = {
     id: string;
     instrument: string;
