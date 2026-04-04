@@ -1,11 +1,14 @@
 import type { Order } from "@/types/order";
 import { formatCurrency, formatDateTime } from "@/utils";
 
+import { Eye } from "lucide-react";
+
 type OrdersTableProps = {
-    orders: Order[]
+    orders: Order[];
+    onViewDetails: (order: Order) => void;
 }
 
-export function OrdersTable({orders}: OrdersTableProps) {
+export function OrdersTable({orders, onViewDetails }: OrdersTableProps) {
   return (
     <table>
       <thead>
@@ -18,6 +21,7 @@ export function OrdersTable({orders}: OrdersTableProps) {
           <th>Quantidade Restante</th>
           <th>Status</th>
           <th>Data/Hora</th>
+          <th>Ações</th>
         </tr>
       </thead>
       <tbody>
@@ -38,6 +42,25 @@ export function OrdersTable({orders}: OrdersTableProps) {
               <td>{order.remainingQuantity}</td>
               <td>{order.status}</td>
               <td>{formatDateTime(order.createdAt)}</td>
+              <td>
+                <button
+                  type="button"
+                  onClick={() => onViewDetails(order)}
+                  aria-label={`Ver detalhes da ordem ${order.id}`}
+                  title="Ver detalhes"
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: 6,
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Eye size={16} />
+                </button>
+              </td>
             </tr>
           ))
         )}
