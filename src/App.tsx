@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react";
-import { OrdersTable, OrdersFilters, OrdersPagination } from "@/components";
+import { OrdersTable, OrdersFilters, OrdersPagination, Modal } from "@/components";
 import { ordersMock } from "@/data/orders";
 import type { OrderSideFilter, OrderStatusFilter } from "./types/order";
 
 export default function App() {
+	const [isOpen, setIsOpen] = useState(true);
   const [search, setSearch] = useState("");
   const [sideFilter, setSideFilter] = useState<OrderSideFilter>('TODOS');
   const [statusFilter, setStatusFilter] = useState<OrderStatusFilter>('TODOS');
@@ -63,6 +64,14 @@ export default function App() {
     <div style={{ padding: 20}}>
       <h1>Gerenciamento de Ordens</h1>
 
+			<Modal
+        isOpen={isOpen}
+        title="Teste de Modal"
+        onClose={() => setIsOpen(false)}
+      >
+        <p>Conteúdo de teste do modal.</p>
+      </Modal>
+
 			<OrdersFilters
         search={search}
         sideFilter={sideFilter}
@@ -72,7 +81,7 @@ export default function App() {
         onStatusFilterChange={handleStatusFilterChange}
       />
 
-      <OrdersTable orders={paginatedOrders} />
+      <OrdersTable orders={paginatedOrders} onViewDetails={(e) => console.log(e)} />
 
 			<OrdersPagination
         currentPage={currentPage}
