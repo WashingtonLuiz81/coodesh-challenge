@@ -1,0 +1,22 @@
+.content {
+  display: grid;
+  gap: 12px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.label {
+  font-weight: 600;
+  color: #475569;
+}
+
+.value {
+  color: #0f172a;
+  text-align: right;
+}

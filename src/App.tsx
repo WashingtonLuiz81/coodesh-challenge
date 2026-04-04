@@ -1,14 +1,16 @@
 import { useMemo, useState } from "react";
-import { OrdersTable, OrdersFilters, OrdersPagination, Modal } from "@/components";
+import { OrdersTable, OrdersFilters, OrdersPagination, OrderDetailsModal } from "@/components";
 import { ordersMock } from "@/data/orders";
-import type { OrderSideFilter, OrderStatusFilter } from "./types/order";
+import type { OrderSideFilter, OrderStatusFilter, Order } from "./types/order";
 
 export default function App() {
-	const [isOpen, setIsOpen] = useState(true);
   const [search, setSearch] = useState("");
   const [sideFilter, setSideFilter] = useState<OrderSideFilter>('TODOS');
   const [statusFilter, setStatusFilter] = useState<OrderStatusFilter>('TODOS');
 	const [currentPage, setCurrentPage] = useState(1);
+
+	const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
 	const itemsPerPage = 5;
 
@@ -25,6 +27,16 @@ export default function App() {
   const handleStatusFilterChange = (value: OrderStatusFilter) => {
     setStatusFilter(value);
     setCurrentPage(1);
+  };
+
+	const handleOpenDetailsModal = (order: Order) => {
+    setSelectedOrder(order);
+    setIsDetailsModalOpen(true);
+  };
+
+  const handleCloseDetailsModal = () => {
+    setSelectedOrder(null);
+    setIsDetailsModalOpen(false);
   };
 
   const filteredOrders = useMemo(() => {
@@ -64,13 +76,11 @@ export default function App() {
     <div style={{ padding: 20}}>
       <h1>Gerenciamento de Ordens</h1>
 
-			<Modal
-        isOpen={isOpen}
-        title="Teste de Modal"
-        onClose={() => setIsOpen(false)}
-      >
-        <p>Conteúdo de teste do modal.</p>
-      </Modal>
+			<OrderDetailsModal
+        order={selectedOrder}
+        isOpen={isDetailsModalOpen}
+        onClose={handleCloseDetailsModal}
+      />
 
 			<OrdersFilters
         search={search}
@@ -81,7 +91,7 @@ export default function App() {
         onStatusFilterChange={handleStatusFilterChange}
       />
 
-      <OrdersTable orders={paginatedOrders} onViewDetails={(e) => console.log(e)} />
+      <OrdersTable orders={paginatedOrders} onViewDetails={handleOpenDetailsModal} />
 
 			<OrdersPagination
         currentPage={currentPage}
