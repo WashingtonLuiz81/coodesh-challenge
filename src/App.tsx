@@ -1,7 +1,15 @@
 import { useMemo, useState } from "react";
-import { OrdersTable, OrdersFilters, OrdersPagination, OrderDetailsModal, CreateOrderModal, } from "@/components";
+import { 
+	OrdersTable,
+	OrdersFilters,
+	OrdersPagination,
+	OrderDetailsModal,
+	CreateOrderModal,
+	CancelOrderModal,
+} from "@/components";
 import { ordersMock } from "@/data/orders";
 import type { OrderSideFilter, OrderStatusFilter, Order } from "@/types/order";
+import { canCancelOrder } from "@/utils";
 
 export default function App() {
 	const [orders, setOrders] = useState<Order[]>(ordersMock);
@@ -13,6 +21,9 @@ export default function App() {
 	const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 	const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+	const [selectedOrderToCancel, setSelectedOrderToCancel] = useState<Order | null>(null);
+	const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
 	const itemsPerPage = 5;
 	
@@ -71,15 +82,49 @@ export default function App() {
     setCurrentPage(1);
   };
 
+	const handleOpenCancelModal = (order: Order) => {
+		setSelectedOrderToCancel(order);
+		setIsCancelModalOpen(true);
+	};
+
+	const handleCloseCancelModal = () => {
+		setSelectedOrderToCancel(null);
+		setIsCancelModalOpen(false);
+	};
+
+	const handleConfirmCancelOrder = () => {
+		if (!selectedOrderToCancel) {
+			return;
+		}
+
+		if (!canCancelOrder(selectedOrderToCancel.status)) {
+			handleCloseCancelModal();
+			return;
+		}
+
+		setOrders((prev) =>
+			prev.map((order) =>
+				order.id === selectedOrderToCancel.id
+					? {
+							...order,
+							status: "CANCELADA",
+						}
+					: order
+			)
+		);
+
+		handleCloseCancelModal();
+	};
+
   const filteredOrders = useMemo(() => {
 		let result = [...orders];
 
-		const normalizedSearch = search.trim().toLocaleLowerCase();
+		const normalizedSearch = search.trim().toLowerCase();
 
 		if(normalizedSearch) {
 			result = result.filter((order) => {
 				return (
-					order.id.toLocaleLowerCase().includes(normalizedSearch) || order.instrument.toLocaleLowerCase().includes(normalizedSearch)
+					order.id.toLowerCase().includes(normalizedSearch) || order.instrument.toLowerCase().includes(normalizedSearch)
 				);
 			});
 		}
@@ -112,6 +157,13 @@ export default function App() {
         Nova Ordem
       </button>
 
+			<CancelOrderModal
+				isOpen={isCancelModalOpen}
+				order={selectedOrderToCancel}
+				onClose={handleCloseCancelModal}
+				onConfirm={handleConfirmCancelOrder}
+			/>
+
 			<CreateOrderModal
         isOpen={isCreateModalOpen}
         onClose={handleCloseCreateModal}
@@ -133,7 +185,11 @@ export default function App() {
         onStatusFilterChange={handleStatusFilterChange}
       />
 
-      <OrdersTable orders={paginatedOrders} onViewDetails={handleOpenDetailsModal} />
+      <OrdersTable
+				orders={paginatedOrders}
+				onViewDetails={handleOpenDetailsModal}
+				onCancelOrder={handleOpenCancelModal}
+			/>
 
 			<OrdersPagination
         currentPage={currentPage}

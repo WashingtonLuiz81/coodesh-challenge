@@ -1,0 +1,35 @@
+.content {
+  display: grid;
+  gap: 20px;
+}
+
+.message {
+  margin: 0;
+  color: #334155;
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.secondaryButton {
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.dangerButton {
+  height: 40px;
+  padding: 0 16px;
+  border: none;
+  background: #dc2626;
+  color: #ffffff;
+  border-radius: 8px;
+  cursor: pointer;
+}

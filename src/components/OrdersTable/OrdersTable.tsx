@@ -1,14 +1,15 @@
 import type { Order } from "@/types/order";
-import { formatCurrency, formatDateTime } from "@/utils";
+import { formatCurrency, formatDateTime, canCancelOrder } from "@/utils";
 
-import { Eye } from "lucide-react";
+import { Eye, XCircle } from "lucide-react";
 
 type OrdersTableProps = {
     orders: Order[];
     onViewDetails: (order: Order) => void;
+    onCancelOrder: (order: Order) => void;
 }
 
-export function OrdersTable({orders, onViewDetails }: OrdersTableProps) {
+export function OrdersTable({orders, onViewDetails, onCancelOrder }: OrdersTableProps) {
   return (
     <table>
       <thead>
@@ -27,7 +28,7 @@ export function OrdersTable({orders, onViewDetails }: OrdersTableProps) {
       <tbody>
         {orders.length === 0 ? (
           <tr>
-            <td colSpan={8} style={{ textAlign: "center", padding: 20 }}>
+            <td colSpan={9} style={{ textAlign: "center", padding: 20 }}>
               Nenhuma ordem encontrada para os filtros aplicados.
             </td>
           </tr>
@@ -59,6 +60,26 @@ export function OrdersTable({orders, onViewDetails }: OrdersTableProps) {
                   }}
                 >
                   <Eye size={16} />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => onCancelOrder(order)}
+                  aria-label={`Cancelar ordem ${order.id}`}
+                  title="Cancelar ordem"
+                  disabled={!canCancelOrder(order.status)}
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    cursor: canCancelOrder(order.status) ? "pointer" : "not-allowed",
+                    padding: 6,
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    opacity: canCancelOrder(order.status) ? 1 : 0.5,
+                  }}
+                >
+                  <XCircle size={16} />
                 </button>
               </td>
             </tr>
