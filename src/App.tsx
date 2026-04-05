@@ -137,7 +137,7 @@ export default function App() {
       result = result.filter((order) => order.status === statusFilter);
     }
 
-    return result;
+    return sortBy(result, "createdAt", "desc");
 	}, [orders, search, sideFilter, statusFilter]);
 
 	const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
