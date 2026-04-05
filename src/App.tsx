@@ -13,7 +13,7 @@ import type {
   OrderStatusFilter,
   Order,
 } from "@/types/order";
-import { canCancelOrder, sortBy } from "@/utils";
+import { canCancelOrder, sortBy, executeOrderMatch } from "@/utils";
 
 export default function App() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -68,38 +68,58 @@ export default function App() {
   };
 
   const handleCreateOrder = async (data: {
-    instrument: string;
-    side: Order["side"];
-    price: number;
-    quantity: number;
-  }) => {
-    const now = new Date().toISOString();
+		instrument: string;
+		side: Order["side"];
+		price: number;
+		quantity: number;
+	}) => {
+		const now = new Date().toISOString();
 
-    const newOrder: Order = {
-      id: `O-${Date.now()}`,
-      instrument: data.instrument,
-      side: data.side,
-      price: data.price,
-      quantity: data.quantity,
-      remainingQuantity: data.quantity,
-      status: "ABERTA",
-      createdAt: now,
-      statusHistory: [
-        {
-          status: "ABERTA",
-          date: now,
-        },
-      ],
-    };
+		const newOrder: Order = {
+			id: `O-${Date.now()}`,
+			instrument: data.instrument,
+			side: data.side,
+			price: data.price,
+			quantity: data.quantity,
+			remainingQuantity: data.quantity,
+			status: "ABERTA",
+			createdAt: now,
+			statusHistory: [
+				{
+					status: "ABERTA",
+					date: now,
+				},
+			],
+		};
 
-    try {
-      const createdOrder = await createOrder(newOrder);
-      setOrders((prev) => [createdOrder, ...prev]);
-      setCurrentPage(1);
-    } catch {
-      console.error("Erro ao criar ordem.");
-    }
-  };
+		const { updatedNewOrder, matchedOrder } = executeOrderMatch(newOrder, orders);
+
+		try {
+			const createdOrder = await createOrder(updatedNewOrder);
+
+			if (matchedOrder) {
+				await updateOrder(matchedOrder.id, {
+					status: matchedOrder.status,
+					remainingQuantity: matchedOrder.remainingQuantity,
+					statusHistory: matchedOrder.statusHistory,
+				});
+			}
+
+			setOrders((prev) => {
+				const updatedOrders = matchedOrder
+					? prev.map((order) =>
+							order.id === matchedOrder.id ? matchedOrder : order
+						)
+					: prev;
+
+				return [createdOrder, ...updatedOrders];
+			});
+
+			setCurrentPage(1);
+		} catch {
+			console.error("Erro ao criar ordem.");
+		}
+	};
 
   const handleOpenCancelModal = (order: Order) => {
     setSelectedOrderToCancel(order);

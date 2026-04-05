@@ -21,6 +21,26 @@
       ]
     },
     {
+      "id": "O-2001",
+      "instrument": "PETR4",
+      "side": "VENDA",
+      "price": 10,
+      "quantity": 50,
+      "remainingQuantity": 40,
+      "status": "PARCIAL",
+      "createdAt": "2026-04-05T10:00:00.000Z",
+      "statusHistory": [
+        {
+          "status": "ABERTA",
+          "date": "2026-04-05T10:00:00.000Z"
+        },
+        {
+          "status": "PARCIAL",
+          "date": "2026-04-05T21:11:43.692Z"
+        }
+      ]
+    },
+    {
       "id": "O-1002",
       "instrument": "VALE3",
       "side": "VENDA",
@@ -241,6 +261,106 @@
         {
           "status": "ABERTA",
           "date": "2026-04-05T03:29:17.972Z"
+        }
+      ]
+    },
+    {
+      "id": "JCLFgIW9ZEg",
+      "instrument": "PETR4",
+      "side": "COMPRA",
+      "price": 10,
+      "quantity": 10,
+      "remainingQuantity": 0,
+      "status": "EXECUTADA",
+      "createdAt": "2026-04-05T21:11:43.692Z",
+      "statusHistory": [
+        {
+          "status": "ABERTA",
+          "date": "2026-04-05T21:11:43.692Z"
+        },
+        {
+          "status": "EXECUTADA",
+          "date": "2026-04-05T21:11:43.692Z"
+        }
+      ]
+    },
+    {
+      "id": "O-2002",
+      "instrument": "VALE3",
+      "side": "VENDA",
+      "price": 20,
+      "quantity": 30,
+      "remainingQuantity": 0,
+      "status": "EXECUTADA",
+      "createdAt": "2026-04-05T10:10:00.000Z",
+      "statusHistory": [
+        {
+          "status": "ABERTA",
+          "date": "2026-04-05T10:10:00.000Z"
+        },
+        {
+          "status": "EXECUTADA",
+          "date": "2026-04-05T21:25:13.349Z"
+        }
+      ]
+    },
+    {
+      "id": "6EBfDnhivtQ",
+      "instrument": "VALE3",
+      "side": "COMPRA",
+      "price": 20,
+      "quantity": 100,
+      "remainingQuantity": 70,
+      "status": "PARCIAL",
+      "createdAt": "2026-04-05T21:25:13.349Z",
+      "statusHistory": [
+        {
+          "status": "ABERTA",
+          "date": "2026-04-05T21:25:13.349Z"
+        },
+        {
+          "status": "PARCIAL",
+          "date": "2026-04-05T21:25:13.349Z"
+        }
+      ]
+    },
+    {
+      "id": "O-2003",
+      "instrument": "ITUB4",
+      "side": "VENDA",
+      "price": 30,
+      "quantity": 100,
+      "remainingQuantity": 60,
+      "status": "PARCIAL",
+      "createdAt": "2026-04-05T10:20:00.000Z",
+      "statusHistory": [
+        {
+          "status": "ABERTA",
+          "date": "2026-04-05T10:20:00.000Z"
+        },
+        {
+          "status": "PARCIAL",
+          "date": "2026-04-05T22:00:44.236Z"
+        }
+      ]
+    },
+    {
+      "id": "89V2omYkI4E",
+      "instrument": "ITUB4",
+      "side": "COMPRA",
+      "price": 30,
+      "quantity": 40,
+      "remainingQuantity": 0,
+      "status": "EXECUTADA",
+      "createdAt": "2026-04-05T22:00:44.236Z",
+      "statusHistory": [
+        {
+          "status": "ABERTA",
+          "date": "2026-04-05T22:00:44.236Z"
+        },
+        {
+          "status": "EXECUTADA",
+          "date": "2026-04-05T22:00:44.236Z"
         }
       ]
     }
