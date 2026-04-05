@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { createOrder, getOrders, updateOrder } from "@/services/orders";
 import { 
 	OrdersTable,
 	OrdersFilters,
@@ -7,12 +8,13 @@ import {
 	CreateOrderModal,
 	CancelOrderModal,
 } from "@/components";
-import { ordersMock } from "@/data/orders";
 import type { OrderSideFilter, OrderStatusFilter, Order } from "@/types/order";
-import { canCancelOrder } from "@/utils";
+import { canCancelOrder, sortBy } from "@/utils";
 
 export default function App() {
-	const [orders, setOrders] = useState<Order[]>(ordersMock);
+	const [orders, setOrders] = useState<Order[]>([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [sideFilter, setSideFilter] = useState<OrderSideFilter>('TODOS');
   const [statusFilter, setStatusFilter] = useState<OrderStatusFilter>('TODOS');
@@ -61,26 +63,31 @@ export default function App() {
     setIsCreateModalOpen(false);
   };
 
-  const handleCreateOrder = (data: {
-    instrument: string;
-    side: Order["side"];
-    price: number;
-    quantity: number;
-  }) => {
-    const newOrder: Order = {
-      id: `O-${Date.now()}`,
-      instrument: data.instrument,
-      side: data.side,
-      price: data.price,
-      quantity: data.quantity,
-      remainingQuantity: data.quantity,
-      status: "ABERTA",
-      createdAt: new Date().toISOString(),
-    };
+  const handleCreateOrder = async (data: {
+		instrument: string;
+		side: Order["side"];
+		price: number;
+		quantity: number;
+	}) => {
+		const newOrder: Order = {
+			id: `O-${Date.now()}`,
+			instrument: data.instrument,
+			side: data.side,
+			price: data.price,
+			quantity: data.quantity,
+			remainingQuantity: data.quantity,
+			status: "ABERTA",
+			createdAt: new Date().toISOString(),
+		};
 
-    setOrders((prev) => [newOrder, ...prev]);
-    setCurrentPage(1);
-  };
+		try {
+			const createdOrder = await createOrder(newOrder);
+			setOrders((prev) => [createdOrder, ...prev]);
+			setCurrentPage(1);
+		} catch {
+			console.error("Erro ao criar ordem.");
+		}
+	};
 
 	const handleOpenCancelModal = (order: Order) => {
 		setSelectedOrderToCancel(order);
@@ -92,7 +99,7 @@ export default function App() {
 		setIsCancelModalOpen(false);
 	};
 
-	const handleConfirmCancelOrder = () => {
+	const handleConfirmCancelOrder = async () => {
 		if (!selectedOrderToCancel) {
 			return;
 		}
@@ -102,19 +109,40 @@ export default function App() {
 			return;
 		}
 
-		setOrders((prev) =>
-			prev.map((order) =>
-				order.id === selectedOrderToCancel.id
-					? {
-							...order,
-							status: "CANCELADA",
-						}
-					: order
-			)
-		);
+		try {
+			const updatedOrder = await updateOrder(selectedOrderToCancel.id, {
+				status: "CANCELADA",
+			});
 
-		handleCloseCancelModal();
+			setOrders((prev) =>
+				prev.map((order) =>
+					order.id === updatedOrder.id ? updatedOrder : order
+				)
+			);
+
+			handleCloseCancelModal();
+		} catch {
+			console.error("Erro ao cancelar ordem.");
+		}
 	};
+
+	useEffect(() => {
+		async function loadOrders() {
+			try {
+				setLoading(true);
+				setError("");
+
+				const data = await getOrders();
+				setOrders(data);
+			} catch {
+				setError("Erro ao carregar ordens.");
+			} finally {
+				setLoading(false);
+			}
+		}
+
+		loadOrders();
+	}, []);
 
   const filteredOrders = useMemo(() => {
 		let result = [...orders];
@@ -148,6 +176,14 @@ export default function App() {
 
     return filteredOrders.slice(startIndex, endIndex);
   }, [filteredOrders, currentPage]);
+
+	if (loading) {
+		return <div style={{ padding: 20 }}>Carregando ordens...</div>;
+	}
+
+	if (error) {
+		return <div style={{ padding: 20 }}>{error}</div>;
+	}
 
   return (
     <div style={{ padding: 20}}>
