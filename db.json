@@ -8,7 +8,17 @@
       "quantity": 100,
       "remainingQuantity": 100,
       "status": "CANCELADA",
-      "createdAt": "2026-04-01T09:00:00.000Z"
+      "createdAt": "2026-04-01T09:00:00.000Z",
+      "statusHistory": [
+        {
+          "status": "ABERTA",
+          "date": "2026-04-01T09:00:00.000Z"
+        },
+        {
+          "status": "CANCELADA",
+          "date": "2026-04-01T09:20:00.000Z"
+        }
+      ]
     },
     {
       "id": "O-1002",
@@ -18,7 +28,17 @@
       "quantity": 50,
       "remainingQuantity": 20,
       "status": "PARCIAL",
-      "createdAt": "2026-04-01T09:30:00.000Z"
+      "createdAt": "2026-04-01T09:30:00.000Z",
+      "statusHistory": [
+        {
+          "status": "ABERTA",
+          "date": "2026-04-01T09:30:00.000Z"
+        },
+        {
+          "status": "PARCIAL",
+          "date": "2026-04-01T09:45:00.000Z"
+        }
+      ]
     },
     {
       "id": "O-1003",
@@ -28,7 +48,17 @@
       "quantity": 200,
       "remainingQuantity": 0,
       "status": "EXECUTADA",
-      "createdAt": "2026-04-01T10:00:00.000Z"
+      "createdAt": "2026-04-01T10:00:00.000Z",
+      "statusHistory": [
+        {
+          "status": "ABERTA",
+          "date": "2026-04-01T10:00:00.000Z"
+        },
+        {
+          "status": "EXECUTADA",
+          "date": "2026-04-01T10:25:00.000Z"
+        }
+      ]
     },
     {
       "id": "O-1004",
@@ -38,7 +68,13 @@
       "quantity": 150,
       "remainingQuantity": 150,
       "status": "ABERTA",
-      "createdAt": "2026-04-01T10:30:00.000Z"
+      "createdAt": "2026-04-01T10:30:00.000Z",
+      "statusHistory": [
+        {
+          "status": "ABERTA",
+          "date": "2026-04-01T10:30:00.000Z"
+        }
+      ]
     },
     {
       "id": "O-1005",
@@ -48,7 +84,17 @@
       "quantity": 80,
       "remainingQuantity": 0,
       "status": "EXECUTADA",
-      "createdAt": "2026-04-01T11:00:00.000Z"
+      "createdAt": "2026-04-01T11:00:00.000Z",
+      "statusHistory": [
+        {
+          "status": "ABERTA",
+          "date": "2026-04-01T11:00:00.000Z"
+        },
+        {
+          "status": "EXECUTADA",
+          "date": "2026-04-01T11:18:00.000Z"
+        }
+      ]
     },
     {
       "id": "O-1006",
@@ -58,7 +104,17 @@
       "quantity": 60,
       "remainingQuantity": 60,
       "status": "CANCELADA",
-      "createdAt": "2026-04-01T11:30:00.000Z"
+      "createdAt": "2026-04-01T11:30:00.000Z",
+      "statusHistory": [
+        {
+          "status": "ABERTA",
+          "date": "2026-04-01T11:30:00.000Z"
+        },
+        {
+          "status": "CANCELADA",
+          "date": "2026-04-01T11:42:00.000Z"
+        }
+      ]
     },
     {
       "id": "O-1007",
@@ -68,7 +124,17 @@
       "quantity": 120,
       "remainingQuantity": 40,
       "status": "PARCIAL",
-      "createdAt": "2026-04-01T12:00:00.000Z"
+      "createdAt": "2026-04-01T12:00:00.000Z",
+      "statusHistory": [
+        {
+          "status": "ABERTA",
+          "date": "2026-04-01T12:00:00.000Z"
+        },
+        {
+          "status": "PARCIAL",
+          "date": "2026-04-01T12:14:00.000Z"
+        }
+      ]
     },
     {
       "id": "O-1008",
@@ -78,7 +144,13 @@
       "quantity": 70,
       "remainingQuantity": 70,
       "status": "ABERTA",
-      "createdAt": "2026-04-01T12:30:00.000Z"
+      "createdAt": "2026-04-01T12:30:00.000Z",
+      "statusHistory": [
+        {
+          "status": "ABERTA",
+          "date": "2026-04-01T12:30:00.000Z"
+        }
+      ]
     },
     {
       "id": "O-1009",
@@ -88,7 +160,17 @@
       "quantity": 90,
       "remainingQuantity": 0,
       "status": "EXECUTADA",
-      "createdAt": "2026-04-01T13:00:00.000Z"
+      "createdAt": "2026-04-01T13:00:00.000Z",
+      "statusHistory": [
+        {
+          "status": "ABERTA",
+          "date": "2026-04-01T13:00:00.000Z"
+        },
+        {
+          "status": "EXECUTADA",
+          "date": "2026-04-01T13:16:00.000Z"
+        }
+      ]
     },
     {
       "id": "O-1010",
@@ -98,7 +180,13 @@
       "quantity": 110,
       "remainingQuantity": 110,
       "status": "ABERTA",
-      "createdAt": "2026-04-01T13:30:00.000Z"
+      "createdAt": "2026-04-01T13:30:00.000Z",
+      "statusHistory": [
+        {
+          "status": "ABERTA",
+          "date": "2026-04-01T13:30:00.000Z"
+        }
+      ]
     },
     {
       "id": "O-1011",
@@ -108,7 +196,17 @@
       "quantity": 95,
       "remainingQuantity": 30,
       "status": "PARCIAL",
-      "createdAt": "2026-04-01T14:00:00.000Z"
+      "createdAt": "2026-04-01T14:00:00.000Z",
+      "statusHistory": [
+        {
+          "status": "ABERTA",
+          "date": "2026-04-01T14:00:00.000Z"
+        },
+        {
+          "status": "PARCIAL",
+          "date": "2026-04-01T14:12:00.000Z"
+        }
+      ]
     },
     {
       "id": "O-1012",
@@ -118,7 +216,17 @@
       "quantity": 40,
       "remainingQuantity": 0,
       "status": "EXECUTADA",
-      "createdAt": "2026-04-01T14:30:00.000Z"
+      "createdAt": "2026-04-01T14:30:00.000Z",
+      "statusHistory": [
+        {
+          "status": "ABERTA",
+          "date": "2026-04-01T14:30:00.000Z"
+        },
+        {
+          "status": "EXECUTADA",
+          "date": "2026-04-01T14:48:00.000Z"
+        }
+      ]
     },
     {
       "id": "tg8v6CSU9GI",
@@ -128,7 +236,13 @@
       "quantity": 50,
       "remainingQuantity": 50,
       "status": "ABERTA",
-      "createdAt": "2026-04-05T03:29:17.972Z"
+      "createdAt": "2026-04-05T03:29:17.972Z",
+      "statusHistory": [
+        {
+          "status": "ABERTA",
+          "date": "2026-04-05T03:29:17.972Z"
+        }
+      ]
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

@@ -20,3 +20,48 @@
   color: #0f172a;
   text-align: right;
 }
+
+.historySection {
+  margin-top: 8px;
+}
+
+.historyTitle {
+  margin: 0 0 12px;
+  font-size: 16px;
+  color: #0f172a;
+}
+
+.emptyHistory {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.historyList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+  max-height: 160px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.historyItem {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.historyStatus {
+  font-weight: 600;
+  color: #334155;
+}
+
+.historyDate {
+  color: #64748b;
+  text-align: right;
+}

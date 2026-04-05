@@ -52,13 +52,37 @@ export function OrderDetailsModal({
         </div>
 
         <div className={styles.row}>
-          <span className={styles.label}>Status</span>
+          <span className={styles.label}>Status Atual</span>
           <span className={styles.value}>{order.status}</span>
         </div>
 
         <div className={styles.row}>
           <span className={styles.label}>Data/Hora</span>
           <span className={styles.value}>{formatDateTime(order.createdAt)}</span>
+        </div>
+
+        <div className={styles.historySection}>
+          <h3 className={styles.historyTitle}>Histórico de status</h3>
+
+          {order.statusHistory.length === 0 ? (
+            <p className={styles.emptyHistory}>
+              Nenhum histórico disponível.
+            </p>
+          ) : (
+            <ul className={styles.historyList}>
+              {order.statusHistory.map((item, index) => (
+                <li
+                  key={`${item.status}-${item.date}-${index}`}
+                  className={styles.historyItem}
+                >
+                  <span className={styles.historyStatus}>{item.status}</span>
+                  <span className={styles.historyDate}>
+                    {formatDateTime(item.date)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </Modal>
