@@ -32,7 +32,14 @@ export default function App() {
     useState<Order | null>(null);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
+	const [dateFilter, setDateFilter] = useState("");
+
   const itemsPerPage = 5;
+
+	const handleDateFilterChange = (value: string) => {
+		setDateFilter(value);
+		setCurrentPage(1);
+	};
 
   const handleSearchChange = (value: string) => {
     setSearch(value);
@@ -207,8 +214,15 @@ export default function App() {
       result = result.filter((order) => order.status === statusFilter);
     }
 
+		if (dateFilter) {
+			result = result.filter((order) => {
+				const orderDate = new Date(order.createdAt).toISOString().slice(0, 10);
+				return orderDate === dateFilter;
+			});
+		}
+
     return sortBy(result, "createdAt", "desc");
-  }, [orders, search, sideFilter, statusFilter]);
+  }, [orders, search, sideFilter, statusFilter, dateFilter]);
 
   const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
 
@@ -255,13 +269,15 @@ export default function App() {
       />
 
       <OrdersFilters
-        search={search}
-        sideFilter={sideFilter}
-        statusFilter={statusFilter}
-        onSearchChange={handleSearchChange}
-        onSideFilterChange={handleSideFilterChange}
-        onStatusFilterChange={handleStatusFilterChange}
-      />
+				search={search}
+				sideFilter={sideFilter}
+				statusFilter={statusFilter}
+				dateFilter={dateFilter}
+				onSearchChange={handleSearchChange}
+				onSideFilterChange={handleSideFilterChange}
+				onStatusFilterChange={handleStatusFilterChange}
+				onDateFilterChange={handleDateFilterChange}
+			/>
 
       <OrdersTable
         orders={paginatedOrders}
