@@ -42,24 +42,28 @@ export default function App() {
 
   const itemsPerPage = 5;
 
+	const resetToFirstPage = () => {
+		resetToFirstPage();
+	};
+
 	const handleDateFilterChange = (value: string) => {
 		setDateFilter(value);
-		setCurrentPage(1);
+		resetToFirstPage();
 	};
 
   const handleSearchChange = (value: string) => {
     setSearch(value);
-    setCurrentPage(1);
+    resetToFirstPage();
   };
 
   const handleSideFilterChange = (value: OrderSideFilter) => {
     setSideFilter(value);
-    setCurrentPage(1);
+    resetToFirstPage();
   };
 
   const handleStatusFilterChange = (value: OrderStatusFilter) => {
     setStatusFilter(value);
-    setCurrentPage(1);
+    resetToFirstPage();
   };
 
   const handleOpenDetailsModal = (order: Order) => {
@@ -128,7 +132,7 @@ export default function App() {
 				return [createdOrder, ...updatedOrders];
 			});
 
-			setCurrentPage(1);
+			resetToFirstPage();
 			showToast("Ordem criada com sucesso!", "success");
 		} catch {
 			showToast("Erro ao criar ordem.", "error");
