@@ -1,26 +1,109 @@
-# Project Empty Template
+# 📊 Gerenciamento de Ordens - BASE Exchange
 
-Este é um repositório de exemplo para você começar a desenvolver a questão, leia com atenção os requisitos do enunciado da questão na plataforma e seguia as boas práticas sobre como utilizar este repositório.
+Aplicação para gerenciamento de ordens de compra e venda de ativos financeiros.
 
+O sistema permite criar, visualizar, filtrar, cancelar e executar ordens, simulando um fluxo básico de negociação.
 
-## Readme do Repositório
+---
 
-- Deve conter o título do projeto
-- Uma descrição sobre o projeto em frase
-- Deve conter uma lista com linguagem, framework e/ou tecnologias usadas
-- Como instalar e usar o projeto (instruções)
-- Não esqueça o [.gitignore](https://www.toptal.com/developers/gitignore)
-- Se está usando github pessoal, referencie que é um challenge by coodesh:  
+## 🚀 Tecnologias utilizadas
 
->  This is a challenge by [Coodesh](https://coodesh.com/)
+- React
+- TypeScript
+- Vite
+- JSON Server
+- Vitest
 
-## Finalização e Instruções para a Apresentação
+---
 
-1. Adicione o link do repositório com a sua solução na questão na plataforma
-2. Verifique se o Readme está bom e faça o commit final em seu repositório;
-3. Envie e aguarde as instruções para seguir. Caso o teste tenha apresentação de vídeo, dentro da tela de entrega será possível gravar após adicionar o link do repositório. Sucesso e boa sorte. =)
+## 📦 Como rodar o projeto
 
+### 1. Instalar dependências
 
-## Suporte
+npm install
 
-Para tirar dúvidas sobre o processo envie uma mensagem diretamente a um especialista no chat da plataforma. 
+---
+
+### 2. Criar arquivo .env
+
+VITE_API_URL=http://localhost:3001
+
+---
+
+### 3. Rodar o JSON Server
+
+npx json-server --watch db.json --port 3001
+
+---
+
+### 4. Rodar a aplicação
+
+npm run dev
+
+---
+
+### 🧪 Rodar testes
+
+npm run test
+
+---
+
+## 📋 Funcionalidades
+
+- Listagem de ordens em tabela
+- Filtros por status, lado, data e busca por ID/instrumento
+- Paginação
+- Modal de detalhes com histórico
+- Criação de novas ordens
+- Cancelamento de ordens com validação
+- Feedback visual com toast
+
+---
+
+## 🧠 Lógica de execução
+
+Ao criar uma nova ordem, o sistema tenta encontrar uma contraparte compatível.
+
+Para isso, considera:
+- mesmo instrumento
+- lados opostos (compra/venda)
+- preço compatível
+
+### Exemplos
+
+- Quantidades iguais → ambas executadas  
+- Nova ordem maior → executa parcialmente  
+- Nova ordem menor → contraparte fica parcial  
+- Sem contraparte → ordem permanece aberta  
+
+---
+
+## 🧪 Testes
+
+Foram criados testes para:
+
+- Regras de cancelamento (`canCancelOrder`)
+- Ordenação (`sortBy`)
+- Execução de ordens (`executeOrderMatch`)
+
+---
+
+## 📁 Estrutura
+
+src/
+  components/
+  utils/
+  services/
+  tests/
+
+---
+
+## 💬 Observações
+
+Procurei manter o código simples e organizado, separando bem a lógica de negócio da interface.
+
+---
+
+## 🏁 Challenge
+
+This is a challenge by https://coodesh.com/
