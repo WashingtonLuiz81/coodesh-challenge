@@ -7,6 +7,7 @@ import {
   OrderDetailsModal,
   CreateOrderModal,
   CancelOrderModal,
+	Toast
 } from "@/components";
 import type {
   OrderSideFilter,
@@ -33,6 +34,11 @@ export default function App() {
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
 
 	const [dateFilter, setDateFilter] = useState("");
+
+	const [toast, setToast] = useState<{
+		message: string;
+		type: "success" | "error";
+	} | null>(null);
 
   const itemsPerPage = 5;
 
@@ -123,8 +129,9 @@ export default function App() {
 			});
 
 			setCurrentPage(1);
+			showToast("Ordem criada com sucesso!", "success");
 		} catch {
-			console.error("Erro ao criar ordem.");
+			showToast("Erro ao criar ordem.", "error");
 		}
 	};
 
@@ -169,10 +176,19 @@ export default function App() {
       );
 
       handleCloseCancelModal();
+			showToast("Ordem cancelada com sucesso!", "success");
     } catch {
-      console.error("Erro ao cancelar ordem.");
+      showToast("Erro ao cancelar ordem.", "error");
     }
   };
+
+	const showToast = (message: string, type: "success" | "error") => {
+		setToast({ message, type });
+
+		setTimeout(() => {
+			setToast(null);
+		}, 3000);
+	};
 
   useEffect(() => {
     async function loadOrders() {
@@ -290,6 +306,8 @@ export default function App() {
         totalPages={totalPages}
         onPageChange={setCurrentPage}
       />
+
+			{toast && <Toast message={toast.message} type={toast.type} />}
     </div>
   );
 }
