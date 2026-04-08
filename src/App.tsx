@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { createOrder, getOrders, updateOrder } from "@/services/orders";
 import {
+  AppLayout,
   OrdersTable,
   OrdersFilters,
   OrdersPagination,
@@ -262,56 +263,58 @@ export default function App() {
   }
 
   return (
-    <div style={{ padding: 20 }}>
-      <h1>Gerenciamento de Ordens</h1>
+    <AppLayout>
+      <div>
+        <h1>Gerenciamento de Ordens</h1>
 
-      <button type="button" onClick={handleOpenCreateModal}>
-        Nova Ordem
-      </button>
+        <button type="button" onClick={handleOpenCreateModal}>
+          Nova Ordem
+        </button>
 
-      <CancelOrderModal
-        isOpen={isCancelModalOpen}
-        order={selectedOrderToCancel}
-        onClose={handleCloseCancelModal}
-        onConfirm={handleConfirmCancelOrder}
-      />
+        <CancelOrderModal
+          isOpen={isCancelModalOpen}
+          order={selectedOrderToCancel}
+          onClose={handleCloseCancelModal}
+          onConfirm={handleConfirmCancelOrder}
+        />
 
-      <CreateOrderModal
-        isOpen={isCreateModalOpen}
-        onClose={handleCloseCreateModal}
-        onCreateOrder={handleCreateOrder}
-      />
+        <CreateOrderModal
+          isOpen={isCreateModalOpen}
+          onClose={handleCloseCreateModal}
+          onCreateOrder={handleCreateOrder}
+        />
 
-      <OrderDetailsModal
-        order={selectedOrder}
-        isOpen={isDetailsModalOpen}
-        onClose={handleCloseDetailsModal}
-      />
+        <OrderDetailsModal
+          order={selectedOrder}
+          isOpen={isDetailsModalOpen}
+          onClose={handleCloseDetailsModal}
+        />
 
-      <OrdersFilters
-				search={search}
-				sideFilter={sideFilter}
-				statusFilter={statusFilter}
-				dateFilter={dateFilter}
-				onSearchChange={handleSearchChange}
-				onSideFilterChange={handleSideFilterChange}
-				onStatusFilterChange={handleStatusFilterChange}
-				onDateFilterChange={handleDateFilterChange}
-			/>
+        <OrdersFilters
+          search={search}
+          sideFilter={sideFilter}
+          statusFilter={statusFilter}
+          dateFilter={dateFilter}
+          onSearchChange={handleSearchChange}
+          onSideFilterChange={handleSideFilterChange}
+          onStatusFilterChange={handleStatusFilterChange}
+          onDateFilterChange={handleDateFilterChange}
+        />
 
-      <OrdersTable
-        orders={paginatedOrders}
-        onViewDetails={handleOpenDetailsModal}
-        onCancelOrder={handleOpenCancelModal}
-      />
+        <OrdersTable
+          orders={paginatedOrders}
+          onViewDetails={handleOpenDetailsModal}
+          onCancelOrder={handleOpenCancelModal}
+        />
 
-      <OrdersPagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
-      />
+        <OrdersPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
 
-			{toast && <Toast message={toast.message} type={toast.type} />}
-    </div>
+        {toast && <Toast message={toast.message} type={toast.type} />}
+      </div>
+    </AppLayout>
   );
 }

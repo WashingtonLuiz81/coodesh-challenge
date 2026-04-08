@@ -1,3 +1,6 @@
+export * from "./AppLayout/AppLayout";
+export * from "./AppHeader/AppHeader";
+export * from "./Sidebar/Sidebar";
 export * from "./OrdersTable/OrdersTable"
 export * from "./OrdersFilters/OrdersFilters"
 export * from "./OrdersPagination/OrdersPagination";
