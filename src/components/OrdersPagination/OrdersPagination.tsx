@@ -1,3 +1,5 @@
+import styles from "./OrdersPagination.module.css";
+
 type OrdersPaginationProps = {
   currentPage: number;
   totalPages: number;
@@ -8,30 +10,53 @@ export function OrdersPagination({
   currentPage,
   totalPages,
   onPageChange,
-}: OrdersPaginationProps){
-    if (totalPages <= 1) {
+}: OrdersPaginationProps) {
+  if (totalPages <= 1) {
     return null;
   }
 
-  return (
-    <div>
-      <button
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-      >
-        Anterior
-      </button>
+  const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
 
-      <span>
-        Página {currentPage} de {totalPages}
+  return (
+    <div className={styles.wrapper}>
+      <span className={styles.summary}>
+        Página <strong>{currentPage}</strong> de <strong>{totalPages}</strong>
       </span>
 
-      <button
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-      >
-        Próxima
-      </button>
+      <div className={styles.controls}>
+        <button
+          type="button"
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className={styles.navButton}
+        >
+          Anterior
+        </button>
+
+        <div className={styles.pages}>
+          {pages.map((page) => (
+            <button
+              key={page}
+              type="button"
+              onClick={() => onPageChange(page)}
+              className={`${styles.pageButton} ${
+                currentPage === page ? styles.active : ""
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+        </div>
+
+        <button
+          type="button"
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className={styles.navButton}
+        >
+          Próxima
+        </button>
+      </div>
     </div>
   );
 }

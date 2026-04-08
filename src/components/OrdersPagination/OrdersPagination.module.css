@@ -1,0 +1,85 @@
+.wrapper {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.summary {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.summary strong {
+  color: #f8fafc;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pages {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.navButton,
+.pageButton {
+  height: 38px;
+  min-width: 38px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background: #111827;
+  color: #f8fafc;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}
+
+.navButton:hover,
+.pageButton:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.navButton:disabled,
+.pageButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .wrapper {
+    align-items: stretch;
+  }
+
+  .controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .pages {
+    width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+  }
+
+  .pageButton {
+    flex: 0 0 auto;
+  }
+}
