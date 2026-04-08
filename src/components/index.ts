@@ -9,3 +9,4 @@ export * from "./OrderDetailsModal/OrderDetailsModal";
 export * from "./CreateOrderModal/CreateOrderModal";
 export * from "./CancelOrderModal/CancelOrderModal";
 export * from "./Toast/Toast";
+export * from "./StatusBadge/StatusBadge";
