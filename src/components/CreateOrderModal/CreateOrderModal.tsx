@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Modal } from "@/components";
 import type { OrderSide } from "@/types/order";
 import styles from "./CreateOrderModal.module.css";
+import { formatCurrency } from "@/utils";
 
 type CreateOrderModalProps = {
   isOpen: boolean;
@@ -17,14 +18,14 @@ type CreateOrderModalProps = {
 type CreateOrderFormData = {
   instrument: string;
   side: OrderSide;
-  price: string;
+  price: number;
   quantity: string;
 };
 
 const initialFormData: CreateOrderFormData = {
   instrument: "",
   side: "COMPRA",
-  price: "",
+  price: 0,
   quantity: "",
 };
 
@@ -35,15 +36,16 @@ export function CreateOrderModal({
 }: CreateOrderModalProps) {
   const [formData, setFormData] = useState<CreateOrderFormData>(initialFormData);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [priceInput, setPriceInput] = useState("");
 
   const isFormValid =
-  formData.instrument.trim() !== "" &&
-  Number(formData.price) > 0 &&
-  Number(formData.quantity) > 0;
+    formData.instrument.trim() !== "" &&
+    formData.price > 0 &&
+    Number(formData.quantity) > 0;
 
   const handleChange = (
     field: keyof CreateOrderFormData,
-    value: string
+    value: string | number
   ) => {
     setFormData((prev) => ({
       ...prev,
@@ -54,6 +56,7 @@ export function CreateOrderModal({
   const handleClose = () => {
     setFormData(initialFormData);
     setErrors({});
+    setPriceInput("");
     onClose();
   };
 
@@ -64,7 +67,7 @@ export function CreateOrderModal({
       newErrors.instrument = "Informe o instrumento.";
     }
 
-    if (!formData.price || Number(formData.price) <= 0) {
+    if (formData.price <= 0) {
       newErrors.price = "Informe um preço válido.";
     }
 
@@ -77,6 +80,25 @@ export function CreateOrderModal({
     return Object.keys(newErrors).length === 0;
   };
 
+  const handlePriceChange = (value: string) => {
+    const numericValue = value.replace(/\D/g, "").slice(0, 7);
+    const parsedValue = Number(numericValue) / 100;
+
+    if (!numericValue) {
+      setPriceInput("");
+      handleChange("price", 0);
+      return;
+    }
+
+    setPriceInput(formatCurrency(parsedValue));
+    handleChange("price", parsedValue);
+  };
+
+  const handleQuantityChange = (value: string) => {
+    const sanitizedValue = value.replace(/\D/g, "");
+    handleChange("quantity", sanitizedValue);
+  };
+
   const handleSubmit = () => {
     if (!validateForm()) {
       return;
@@ -85,7 +107,7 @@ export function CreateOrderModal({
     onCreateOrder({
       instrument: formData.instrument.trim().toUpperCase(),
       side: formData.side,
-      price: Number(formData.price),
+      price: formData.price,
       quantity: Number(formData.quantity),
     });
 
@@ -95,9 +117,7 @@ export function CreateOrderModal({
   return (
     <Modal isOpen={isOpen} title="Nova Ordem" onClose={handleClose}>
       <div className={styles.form}>
-        <p className={styles.helper}>
-        * Campos obrigatórios
-        </p>
+        <p className={styles.helper}>* Campos obrigatórios</p>
 
         <div className={styles.field}>
           <label htmlFor="instrument" className={styles.label}>
@@ -112,6 +132,7 @@ export function CreateOrderModal({
             className={styles.input}
             placeholder="Ex: PETR4"
           />
+
           {errors.instrument ? (
             <span className={styles.error}>{errors.instrument}</span>
           ) : null}
@@ -142,14 +163,15 @@ export function CreateOrderModal({
 
           <input
             id="price"
-            type="number"
-            min="0"
-            step="0.01"
-            value={formData.price}
-            onChange={(e) => handleChange("price", e.target.value)}
+            type="text"
+            inputMode="numeric"
+            placeholder="R$ 0,00"
+            value={priceInput}
+            onChange={(e) => handlePriceChange(e.target.value)}
             className={styles.input}
-            placeholder="Ex: 28.50"
+            maxLength={16}
           />
+
           {errors.price ? (
             <span className={styles.error}>{errors.price}</span>
           ) : null}
@@ -159,17 +181,22 @@ export function CreateOrderModal({
           <label htmlFor="quantity" className={styles.label}>
             Quantidade <span className={styles.required}>*</span>
           </label>
-          
+
           <input
             id="quantity"
-            type="number"
-            min="1"
-            step="1"
+            type="text"
+            inputMode="numeric"
             value={formData.quantity}
-            onChange={(e) => handleChange("quantity", e.target.value)}
+            onChange={(e) => handleQuantityChange(e.target.value)}
+            onKeyDown={(e) => {
+              if (["e", "E", "+", "-", ".", ","].includes(e.key)) {
+                e.preventDefault();
+              }
+            }}
             className={styles.input}
             placeholder="Ex: 100"
           />
+
           {errors.quantity ? (
             <span className={styles.error}>{errors.quantity}</span>
           ) : null}

@@ -6,7 +6,8 @@ export async function getOrders(): Promise<Order[]> {
   const response = await fetch(API_URL);
 
   if (!response.ok) {
-    throw new Error("Erro ao buscar ordens.");
+    const errorText = await response.text();
+    throw new Error(`Erro ao buscar ordens: ${response.status} - ${errorText}`);
   }
 
   return response.json();
@@ -22,7 +23,8 @@ export async function createOrder(order: Order): Promise<Order> {
   });
 
   if (!response.ok) {
-    throw new Error("Erro ao criar ordem.");
+    const errorText = await response.text();
+    throw new Error(`Erro ao criar ordem: ${response.status} - ${errorText}`);
   }
 
   return response.json();
@@ -32,7 +34,7 @@ export async function updateOrder(
   id: string,
   data: Partial<Order>
 ): Promise<Order> {
-  const response = await fetch(`${API_URL}/${id}`, {
+  const response = await fetch(`${API_URL}/${encodeURIComponent(id)}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
@@ -41,7 +43,10 @@ export async function updateOrder(
   });
 
   if (!response.ok) {
-    throw new Error("Erro ao atualizar ordem.");
+    const errorText = await response.text();
+    throw new Error(
+      `Erro ao atualizar ordem ${id}: ${response.status} - ${errorText}`
+    );
   }
 
   return response.json();

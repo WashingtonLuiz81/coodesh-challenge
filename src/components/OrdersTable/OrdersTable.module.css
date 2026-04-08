@@ -107,6 +107,19 @@
   font-size: 14px;
 }
 
+.highlightRow {
+  animation: highlightRow 1.2s ease;
+}
+
+@keyframes highlightRow {
+  0% {
+    background: rgba(59, 130, 246, 0.32);
+  }
+  100% {
+    background: transparent;
+  }
+}
+
 @media (max-width: 768px) {
   .table tbody td,
   .table thead th {

@@ -38,6 +38,8 @@ export default function App() {
 
 	const [dateFilter, setDateFilter] = useState("");
 
+  const [highlightedOrderId, setHighlightedOrderId] = useState<string | null>(null);
+
 	const [toast, setToast] = useState<{
 		message: string;
 		type: "success" | "error";
@@ -88,59 +90,77 @@ export default function App() {
   };
 
   const handleCreateOrder = async (data: {
-		instrument: string;
-		side: Order["side"];
-		price: number;
-		quantity: number;
-	}) => {
-		const now = new Date().toISOString();
+    instrument: string;
+    side: Order["side"];
+    price: number;
+    quantity: number;
+  }) => {
+    const now = new Date().toISOString();
 
-		const newOrder: Order = {
-			id: `O-${Date.now()}`,
-			instrument: data.instrument,
-			side: data.side,
-			price: data.price,
-			quantity: data.quantity,
-			remainingQuantity: data.quantity,
-			status: "ABERTA",
-			createdAt: now,
-			statusHistory: [
-				{
-					status: "ABERTA",
-					date: now,
-				},
-			],
-		};
+    const newOrder: Order = {
+      id: `O-${Date.now()}`,
+      instrument: data.instrument,
+      side: data.side,
+      price: data.price,
+      quantity: data.quantity,
+      remainingQuantity: data.quantity,
+      status: "ABERTA",
+      createdAt: now,
+      statusHistory: [
+        {
+          status: "ABERTA",
+          date: now,
+        },
+      ],
+    };
 
-		const { updatedNewOrder, matchedOrder } = executeOrderMatch(newOrder, orders);
+    const { updatedNewOrder, matchedOrder } = executeOrderMatch(newOrder, orders);
 
-		try {
-			const createdOrder = await createOrder(updatedNewOrder);
+    try {
+      const createdOrder = await createOrder(updatedNewOrder);
 
-			if (matchedOrder) {
-				await updateOrder(matchedOrder.id, {
-					status: matchedOrder.status,
-					remainingQuantity: matchedOrder.remainingQuantity,
-					statusHistory: matchedOrder.statusHistory,
-				});
-			}
+      let updatedMatchedOrder: Order | null = null;
 
-			setOrders((prev) => {
-				const updatedOrders = matchedOrder
-					? prev.map((order) =>
-							order.id === matchedOrder.id ? matchedOrder : order
-						)
-					: prev;
+      if (matchedOrder) {
+        try {
+          updatedMatchedOrder = await updateOrder(matchedOrder.id, {
+            status: matchedOrder.status,
+            remainingQuantity: matchedOrder.remainingQuantity,
+            statusHistory: matchedOrder.statusHistory,
+          });
+        } catch (error) {
+          console.error("Erro ao atualizar contraparte:", error);
 
-				return [createdOrder, ...updatedOrders];
-			});
+          setOrders((prev) => [createdOrder, ...prev]);
+          setCurrentPage(1);
+          highlightOrder(createdOrder.id);
 
-			resetToFirstPage();
-			showToast("Ordem criada com sucesso!", "success");
-		} catch {
-			showToast("Erro ao criar ordem.", "error");
-		}
-	};
+          showToast(
+            "Ordem criada, mas houve erro ao atualizar a contraparte.",
+            "error"
+          );
+          return;
+        }
+      }
+
+      setOrders((prev) => {
+        const updatedOrders = updatedMatchedOrder
+          ? prev.map((order) =>
+              order.id === updatedMatchedOrder!.id ? updatedMatchedOrder! : order
+            )
+          : prev;
+
+        return [createdOrder, ...updatedOrders];
+      });
+
+      setCurrentPage(1);
+      highlightOrder(createdOrder.id);
+      showToast("Ordem criada com sucesso!", "success");
+    } catch (error) {
+      console.error("Erro ao criar ordem:", error);
+      showToast("Erro ao criar ordem.", "error");
+    }
+  };
 
   const handleOpenCancelModal = (order: Order) => {
     setSelectedOrderToCancel(order);
@@ -184,9 +204,18 @@ export default function App() {
 
       handleCloseCancelModal();
 			showToast("Ordem cancelada com sucesso!", "success");
+      highlightOrder(updatedOrder.id);
     } catch {
       showToast("Erro ao cancelar ordem.", "error");
     }
+  };
+
+  const highlightOrder = (orderId: string) => {
+    setHighlightedOrderId(orderId);
+
+    setTimeout(() => {
+      setHighlightedOrderId(null);
+    }, 1200);
   };
 
 	const showToast = (message: string, type: "success" | "error") => {
@@ -296,6 +325,7 @@ export default function App() {
             orders={paginatedOrders}
             onViewDetails={handleOpenDetailsModal}
             onCancelOrder={handleOpenCancelModal}
+            highlightedOrderId={highlightedOrderId}
           />
 
           <OrdersPagination

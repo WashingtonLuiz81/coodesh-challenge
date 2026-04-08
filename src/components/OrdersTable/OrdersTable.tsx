@@ -8,12 +8,14 @@ type OrdersTableProps = {
   orders: Order[];
   onViewDetails: (order: Order) => void;
   onCancelOrder: (order: Order) => void;
+  highlightedOrderId: string | null;
 };
 
 export function OrdersTable({
   orders,
   onViewDetails,
   onCancelOrder,
+  highlightedOrderId,
 }: OrdersTableProps) {
   return (
     <div className={styles.tableWrapper}>
@@ -41,7 +43,10 @@ export function OrdersTable({
             </tr>
           ) : (
             orders.map((order) => (
-              <tr key={order.id}>
+              <tr
+                key={order.id}
+                className={order.id === highlightedOrderId ? styles.highlightRow : ""}
+              >
                 <td className={styles.idCell}>{order.id}</td>
                 <td>{order.instrument}</td>
                 <td>
