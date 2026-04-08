@@ -17,6 +17,8 @@ import type {
 } from "@/types/order";
 import { canCancelOrder, sortBy, executeOrderMatch } from "@/utils";
 
+import styles from "./App.module.css";
+
 export default function App() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -264,57 +266,66 @@ export default function App() {
 
   return (
     <AppLayout>
-      <div>
-        <h1>Gerenciamento de Ordens</h1>
+      <div className={styles.page}>
+        <div className={styles.pageHeader}>
+          <div>
+            <h1 className={styles.title}>Gerenciamento de Ordens</h1>
+            <p className={styles.subtitle}>
+              Visualize, crie e acompanhe ordens de compra e venda.
+            </p>
+          </div>
 
-        <button type="button" onClick={handleOpenCreateModal}>
-          Nova Ordem
-        </button>
+          <button type="button" className={styles.primaryButton} onClick={handleOpenCreateModal}>
+            Nova Ordem
+          </button>
+        </div>
 
-        <CancelOrderModal
-          isOpen={isCancelModalOpen}
-          order={selectedOrderToCancel}
-          onClose={handleCloseCancelModal}
-          onConfirm={handleConfirmCancelOrder}
-        />
+        <div className={styles.contentCard}>
+          <OrdersFilters
+            search={search}
+            sideFilter={sideFilter}
+            statusFilter={statusFilter}
+            dateFilter={dateFilter}
+            onSearchChange={handleSearchChange}
+            onSideFilterChange={handleSideFilterChange}
+            onStatusFilterChange={handleStatusFilterChange}
+            onDateFilterChange={handleDateFilterChange}
+          />
 
-        <CreateOrderModal
-          isOpen={isCreateModalOpen}
-          onClose={handleCloseCreateModal}
-          onCreateOrder={handleCreateOrder}
-        />
+          <OrdersTable
+            orders={paginatedOrders}
+            onViewDetails={handleOpenDetailsModal}
+            onCancelOrder={handleOpenCancelModal}
+          />
 
-        <OrderDetailsModal
-          order={selectedOrder}
-          isOpen={isDetailsModalOpen}
-          onClose={handleCloseDetailsModal}
-        />
-
-        <OrdersFilters
-          search={search}
-          sideFilter={sideFilter}
-          statusFilter={statusFilter}
-          dateFilter={dateFilter}
-          onSearchChange={handleSearchChange}
-          onSideFilterChange={handleSideFilterChange}
-          onStatusFilterChange={handleStatusFilterChange}
-          onDateFilterChange={handleDateFilterChange}
-        />
-
-        <OrdersTable
-          orders={paginatedOrders}
-          onViewDetails={handleOpenDetailsModal}
-          onCancelOrder={handleOpenCancelModal}
-        />
-
-        <OrdersPagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
+          <OrdersPagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </div>
 
         {toast && <Toast message={toast.message} type={toast.type} />}
       </div>
+
+      <CancelOrderModal
+        isOpen={isCancelModalOpen}
+        order={selectedOrderToCancel}
+        onClose={handleCloseCancelModal}
+        onConfirm={handleConfirmCancelOrder}
+      />
+
+      <CreateOrderModal
+        isOpen={isCreateModalOpen}
+        onClose={handleCloseCreateModal}
+        onCreateOrder={handleCreateOrder}
+      />
+
+      <OrderDetailsModal
+        order={selectedOrder}
+        isOpen={isDetailsModalOpen}
+        onClose={handleCloseDetailsModal}
+      />
     </AppLayout>
   );
 }
