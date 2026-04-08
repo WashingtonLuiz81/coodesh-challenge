@@ -1,6 +1,6 @@
 # 📊 Gerenciamento de Ordens - BASE Exchange
 
-Aplicação para gerenciamento de ordens de compra e venda de ativos financeiros.
+Aplicação front-end para gerenciamento de ordens de compra e venda de ativos financeiros.
 
 O sistema permite criar, visualizar, filtrar, cancelar e executar ordens, simulando um fluxo básico de negociação.
 
@@ -11,8 +11,8 @@ O sistema permite criar, visualizar, filtrar, cancelar e executar ordens, simula
 - React
 - TypeScript
 - Vite
-- JSON Server
-- Vitest
+- JSON Server (API mock)
+- Vitest (testes automatizados)
 
 ---
 
@@ -20,31 +20,41 @@ O sistema permite criar, visualizar, filtrar, cancelar e executar ordens, simula
 
 ### 1. Instalar dependências
 
+```bash
 npm install
+```
 
 ---
 
-### 2. Criar arquivo .env
+### 2. Criar arquivo `.env`
 
+```env
 VITE_API_URL=http://localhost:3001
+```
 
 ---
 
 ### 3. Rodar o JSON Server
 
+```bash
 npx json-server --watch db.json --port 3001
+```
 
 ---
 
 ### 4. Rodar a aplicação
 
+```bash
 npm run dev
+```
 
 ---
 
-### 🧪 Rodar testes
+## 🧪 Rodar testes
 
+```bash
 npm run test
+```
 
 ---
 
@@ -53,10 +63,12 @@ npm run test
 - Listagem de ordens em tabela
 - Filtros por status, lado, data e busca por ID/instrumento
 - Paginação
-- Modal de detalhes com histórico
+- Modal de detalhes com histórico de status
 - Criação de novas ordens
 - Cancelamento de ordens com validação
 - Feedback visual com toast
+- Destaque visual ao criar/atualizar ordens
+- Máscara de moeda no campo de preço
 
 ---
 
@@ -64,23 +76,23 @@ npm run test
 
 Ao criar uma nova ordem, o sistema tenta encontrar uma contraparte compatível.
 
-Para isso, considera:
-- mesmo instrumento
-- lados opostos (compra/venda)
-- preço compatível
+Critérios considerados:
+- Mesmo instrumento
+- Lados opostos (compra/venda)
+- Preço compatível
 
-### Exemplos
+### Regras de execução
 
-- Quantidades iguais → ambas executadas  
-- Nova ordem maior → executa parcialmente  
-- Nova ordem menor → contraparte fica parcial  
-- Sem contraparte → ordem permanece aberta  
+- Quantidades iguais → ambas ficam **executadas**
+- Nova ordem maior → nova ordem fica **parcial**
+- Nova ordem menor → contraparte fica **parcial**
+- Sem contraparte → ordem permanece **aberta**
 
 ---
 
 ## 🧪 Testes
 
-Foram criados testes para:
+Foram criados testes unitários para:
 
 - Regras de cancelamento (`canCancelOrder`)
 - Ordenação (`sortBy`)
@@ -88,22 +100,29 @@ Foram criados testes para:
 
 ---
 
-## 📁 Estrutura
+## 📁 Estrutura do projeto
 
+```
 src/
   components/
-  utils/
   services/
+  utils/
   tests/
+```
 
 ---
 
 ## 💬 Observações
 
-Procurei manter o código simples e organizado, separando bem a lógica de negócio da interface.
+O projeto foi desenvolvido com foco em:
+
+- Código simples e legível
+- Separação entre lógica de negócio e interface
+- Experiência do usuário (UX)
+- Componentização e reutilização
 
 ---
 
 ## 🏁 Challenge
 
-This is a challenge by https://coodesh.com/
+This is a challenge by [Coodesh](https://coodesh.com/)
